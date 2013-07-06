@@ -28,12 +28,11 @@ class User
     def initialize(json)
       init(json)                            # Initialize the LazyDoc object
     end
+end
 
-  end
-
-  user = User.new(json)
-  puts user.name
-  puts.user.address
+user = User.new(json)
+puts user.name
+puts.user.address
 ```
 
 ## To Do
