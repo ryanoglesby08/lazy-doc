@@ -23,8 +23,8 @@ module LazyDoc
 
 
     module ClassMethods
-      def find(attribute, options)
-        json_property = options[:by]
+      def find(attribute, options = {})
+        json_property = options[:by] || attribute
 
         define_method attribute do
           cache attribute do
