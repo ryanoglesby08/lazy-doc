@@ -24,6 +24,7 @@ class User
 
     find :name                              # Access the attribute "name"
     find :address, by: :street_address      # Access the attribute "street_address"
+    find :job, by: [:profile, :occupation, :title]      # Access the attribute "title" found at "profile" -> "occupation"
 
     def initialize(json)
       init(json)                            # Initialize the LazyDoc object
@@ -32,11 +33,12 @@ end
 
 user = User.new(json)
 puts user.name
-puts.user.address
+puts user.address
+puts user.job
 ```
 
 ## To Do
-1. Full path parsing more than just top level.  ex: `find :name, by: [:profile, :basic_info, :name]`
+X. Full path parsing more than just top level.  ex: `find :name, by: [:profile, :basic_info, :name]`
 2. Error handling for incorrectly specified paths
 3. Exception handling when a json does not contain a path, but that is ok.
 4. Transforms.

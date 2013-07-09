@@ -44,6 +44,14 @@ module LazyDoc
         expect(test_find.foo).to eq("bar")
       end
 
+      it 'defines a method that accesses a named json attribute through a json path' do
+        json = '{"bar": {"foo":"Hello World"}}'
+        test_find.singleton_class.find :foo, by: [:bar, :foo]
+        test_find.init(json)
+
+        expect(test_find.foo).to eq('Hello World')
+      end
+
     end
 
   end
