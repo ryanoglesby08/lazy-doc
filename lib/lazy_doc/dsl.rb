@@ -12,7 +12,7 @@ module LazyDoc
 
     private
 
-    def cache(attribute)
+    def memoize(attribute)
       attribute_variable_name = "@_lazy_doc_#{attribute}"
       unless instance_variable_defined?(attribute_variable_name)
         instance_variable_set(attribute_variable_name, yield)
@@ -34,7 +34,7 @@ module LazyDoc
         json_path = [json_path].flatten
 
         define_method attribute do
-          cache attribute do
+          memoize attribute do
             extract_json_attribute_from(json_path)
           end
 
