@@ -38,7 +38,7 @@ puts user.job
 ```
 
 ## To Do
-X. Full path parsing more than just top level.  ex: `find :name, by: [:profile, :basic_info, :name]`
+1. DONE - Full path parsing more than just top level.  ex: `find :name, by: [:profile, :basic_info, :name]`
 2. Error handling for incorrectly specified paths
 3. Exception handling when a json does not contain a path, but that is ok.
 4. Transforms.
