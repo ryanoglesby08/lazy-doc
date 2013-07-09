@@ -1,5 +1,7 @@
 # LazyDoc
 
+NOTE: LazyDoc is currently in alpha and is not quite ready for use.
+
 An implementation of the [Embedded Document](http://martinfowler.com/bliki/EmbeddedDocument.html) pattern for POROs.
 The embedded JSON is lazily parsed so that needed attributes from the document are only parsed when accessed.
 Finally, parsed values are cached so that subsequent access does not reach into the JSON again.
