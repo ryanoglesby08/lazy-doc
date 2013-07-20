@@ -21,7 +21,7 @@ module LazyDoc
       instance_variable_get(attribute_variable_name)
     end
 
-    def extract_json_attribute_from(json_path)
+    def extract_attribute_from(json_path)
       json_path.inject(embedded_doc) do |final_value, attribute|
         final_value[attribute.to_s]
       end
@@ -31,15 +31,17 @@ module LazyDoc
       @_embedded_doc ||= JSON.parse(@_embedded_doc_source)
     end
 
-
     module ClassMethods
       def access(attribute, options = {})
         json_path = options[:via] || attribute
         json_path = [json_path].flatten
 
+        transformation = options[:then] || lambda { |value| value }
+
         define_method attribute do
           memoize attribute do
-            extract_json_attribute_from json_path
+            value = extract_attribute_from json_path
+            transformation.call(value)
           end
 
         end

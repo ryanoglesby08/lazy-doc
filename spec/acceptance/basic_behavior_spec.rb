@@ -7,6 +7,7 @@ describe 'basic behavior with a simple JSON document' do
     access :name
     access :address, via: :streetAddress
     access :job_title, via: [:profile, :occupation, :title]
+    access :born_on, via: [:profile, :bornOn], then: lambda { |born_on| born_on.to_i }
 
     def initialize(json)
       lazily_embed(json)
@@ -14,13 +15,12 @@ describe 'basic behavior with a simple JSON document' do
 
   end
 
-  it 'lazily parses it' do
-    json = '{"name":"Tyler Durden", "streetAddress":"Paper Street", "profile":{"occupation":{"title":"Soap Maker","salary":0}}}'
+  let(:json_file) { File.read(File.join(File.dirname(__FILE__), 'support/user.json')) }
 
-    lazy_doc = User.new(json)
+  subject { User.new(json_file) }
 
-    expect(lazy_doc.name).to eq('Tyler Durden')
-    expect(lazy_doc.address).to eq('Paper Street')
-    expect(lazy_doc.job_title).to eq('Soap Maker')
-  end
+  its(:name) { should == 'Tyler Durden' }
+  its(:address) { should == 'Paper Street' }
+  its(:job_title) { should == 'Soap Maker' }
+  its(:born_on) { should == 1999 }
 end

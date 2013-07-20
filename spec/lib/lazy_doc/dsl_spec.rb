@@ -2,7 +2,7 @@ require_relative '../../spec_helper'
 
 module LazyDoc
   describe DSL do
-    describe '.find' do
+    describe '.access' do
       let(:json) { '{"foo":"bar"}' }
 
       subject(:test_find) { Object.new }
@@ -19,13 +19,6 @@ module LazyDoc
         expect(test_find).to respond_to :foo
       end
 
-      it 'defines a method that accesses a named json attribute' do
-        test_find.singleton_class.access :my_foo, via: :foo
-        test_find.lazily_embed(json)
-
-        expect(test_find.my_foo).to eq("bar")
-      end
-
       it 'assumes the attribute name is sufficient to find the attribute' do
         test_find.singleton_class.access :foo
         test_find.lazily_embed(json)
@@ -39,17 +32,35 @@ module LazyDoc
 
         expect(test_find.foo).to eq("bar")
 
-        test_find.instance_variable_set(:@json, nil)
+        test_find.stub(:embedded_doc) { nil }
 
         expect(test_find.foo).to eq("bar")
       end
 
-      it 'defines a method that accesses a named json attribute through a json path' do
-        json = '{"bar": {"foo":"Hello World"}}'
-        test_find.singleton_class.access :foo, via: [:bar, :foo]
-        test_find.lazily_embed(json)
+      context 'via' do
+        it 'defines a method that accesses a named json attribute' do
+          test_find.singleton_class.access :my_foo, via: :foo
+          test_find.lazily_embed(json)
 
-        expect(test_find.foo).to eq('Hello World')
+          expect(test_find.my_foo).to eq("bar")
+        end
+
+        it 'defines a method that accesses a named json attribute through a json path' do
+          json = '{"bar": {"foo":"Hello World"}}'
+          test_find.singleton_class.access :foo, via: [:bar, :foo]
+          test_find.lazily_embed(json)
+
+          expect(test_find.foo).to eq('Hello World')
+        end
+      end
+
+      context 'then' do
+        it 'executes a block on the the attribute at the json path' do
+          test_find.singleton_class.access :foo, then: lambda { |foo| foo.upcase }
+          test_find.lazily_embed(json)
+
+          expect(test_find.foo).to eq('BAR')
+        end
       end
 
     end
