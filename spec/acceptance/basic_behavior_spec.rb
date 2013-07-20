@@ -4,12 +4,12 @@ describe 'basic behavior with a simple JSON document' do
   class User
     include LazyDoc::DSL
 
-    find :name
-    find :address, by: :streetAddress
-    find :job_title, by: [:profile, :occupation, :title]
+    access :name
+    access :address, via: :streetAddress
+    access :job_title, via: [:profile, :occupation, :title]
 
     def initialize(json)
-      init(json)
+      lazily_embed(json)
     end
 
   end

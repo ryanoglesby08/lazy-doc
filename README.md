@@ -22,12 +22,12 @@ Add this line to your application's Gemfile:
 class User
     include LazyDoc::DSL
 
-    find :name                              # Access the attribute "name"
-    find :address, by: :street_address      # Access the attribute "street_address"
-    find :job, by: [:profile, :occupation, :title]      # Access the attribute "title" found at "profile" -> "occupation"
+    access :name                                        # Access the attribute "name"
+    access :address, via: :street_address               # Access the attribute "street_address"
+    access :job, via: [:profile, :occupation, :title]   # Access the attribute "title" found at "profile" -> "occupation"
 
     def initialize(json)
-      init(json)                            # Initialize the LazyDoc object
+      lazily_embed(json)                                        # Initialize the LazyDoc object
     end
 end
 
