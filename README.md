@@ -3,22 +3,20 @@
 NOTE: LazyDoc is currently in alpha and is not quite ready for use.
 
 An implementation of the [Embedded Document](http://martinfowler.com/bliki/EmbeddedDocument.html) pattern for POROs.
-The embedded JSON is lazily parsed so that needed attributes from the document are only parsed when accessed.
-Finally, parsed values are cached so that subsequent access does not reach into the JSON again.
+
+LazyDoc provides a declarative DSL for extracting deeply nested values from a JSON document. The embedded JSON is lazily
+parsed so that needed attributes from the document are only parsed when accessed. Finally, parsed values are cached
+so that subsequent access does not access the JSON again.
+
+*Currently, LazyDoc only supports JSON.* XML support will be added later.
+
+## Installation
 
 Add this line to your application's Gemfile:
 
     gem 'lazy_doc'
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install lazy_doc
-
-## Usage
+## Example Usage
 
 ```ruby
 class User
@@ -40,6 +38,7 @@ puts user.job
 ```
 
 ## To Do
+
 1. DONE - Full path parsing more than just top level.  ex: `find :name, by: [:profile, :basic_info, :name]`
 2. Error handling for incorrectly specified paths
 3. Exception handling when a json does not contain a path, but that is ok.
@@ -53,6 +52,7 @@ puts user.job
 7. Joins
     - Using previously defined attributes. ex: `join :address, from: [:street, :city, :state:, :zip]`
     - Defining attributes in place.
+8. XML support
 
 ## Contributing
 
