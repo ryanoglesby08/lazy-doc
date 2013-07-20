@@ -7,7 +7,7 @@ module LazyDoc
     end
 
     def lazily_embed(json)
-      @_lazy_doc_document = JSON.parse(json)
+      @_embedded_doc_source = json
     end
 
     private
@@ -22,9 +22,13 @@ module LazyDoc
     end
 
     def extract_json_attribute_from(json_path)
-      json_path.inject(@_lazy_doc_document) do |final_value, attribute|
+      json_path.inject(embedded_doc) do |final_value, attribute|
         final_value[attribute.to_s]
       end
+    end
+
+    def embedded_doc
+      @_embedded_doc ||= JSON.parse(@_embedded_doc_source)
     end
 
 
