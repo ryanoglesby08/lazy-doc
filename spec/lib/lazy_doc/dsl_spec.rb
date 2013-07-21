@@ -63,6 +63,29 @@ module LazyDoc
         end
       end
 
+      context 'as' do
+        class Foo
+          include LazyDoc::DSL
+
+          access :bar
+
+          def initialize(json)
+            lazily_embed(json)
+          end
+        end
+
+        it 'embeds a sub-object into another user defined object' do
+          json = '{"foo": {"bar": "Hello"}}'
+          test_find.singleton_class.access :foo, as: Foo
+          test_find.lazily_embed(json)
+
+          foo = test_find.foo
+
+          expect(foo).to be_a(Foo)
+          expect(foo.bar).to eq('Hello')
+        end
+      end
+
     end
 
   end

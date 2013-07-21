@@ -31,21 +31,33 @@ module LazyDoc
       @_embedded_doc ||= JSON.parse(@_embedded_doc_source)
     end
 
+
     module ClassMethods
       def access(attribute, options = {})
-        json_path = options[:via] || attribute
-        json_path = [json_path].flatten
+        options = default_options(attribute).merge!(options)
 
-        transformation = options[:finally] || lambda { |value| value }
+        json_path = [options[:via]].flatten
+        transformation = options[:finally]
+        sub_object_class = options[:as]
 
         define_method attribute do
           memoize attribute do
             value = extract_attribute_from json_path
-            transformation.call(value)
+            transformed_value = transformation.call(value)
+
+            sub_object_class.nil? ? transformed_value : sub_object_class.new(transformed_value.to_json)
           end
 
         end
 
+      end
+
+      NO_OP_TRANSFORMATION = lambda { |value| value }
+      def default_options(attribute)
+        {
+          via: attribute,
+          finally: NO_OP_TRANSFORMATION
+        }
       end
 
     end

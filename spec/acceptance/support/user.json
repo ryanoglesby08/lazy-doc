@@ -7,5 +7,9 @@
       "title": "Soap Maker",
       "salary": 0
     }
+  },
+  "friends": {
+    "bestFriend": "Brad Pitt",
+    "lover": "Helena Bonham Carter"
   }
 }
