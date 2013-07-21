@@ -16,6 +16,16 @@ Add this line to your application's Gemfile:
 
     gem 'lazy_doc'
 
+## DSL Options
+
+1. Basic usage. `access :name` will look for a property called 'name' at the top level of the embedded document.
+2. `via`: `access :job, via: [:profile, :occupation]` will look for a property called 'job' by parsing through
+'profile' -> 'occupation'.
+3. `finally`: `access :initials, finally: lambda { |initials| initials.upcase }` will call the supplied block, passing in
+'initials,' and will return the result of that block.
+4. `as`: `access :profile, as: Profile` will pass the sub-document found at 'profile' into a new 'Profile' object, and will return
+the newly constructed Profile object. This is great for constructing nested LazyDoc relationships.
+
 ## Example Usage
 
 ```ruby
@@ -43,14 +53,16 @@ puts user.job
 2. Error handling for incorrectly specified paths
 3. Exception handling when a json does not contain a path, but that is ok.
 4. DONE - Transforms. ex: `access :name, finally: lambda { |name| name.gsub('-',' ') }`
-5. Objects from sub-trees.  ex: `access :profile, as: Profile` (This would construct a LazyDoc Profile object and pass the json found at "profile" to it)
+5. DONE - Objects from sub-trees.  ex: `access :profile, as: Profile` (This would construct a LazyDoc Profile object and pass the json found at "profile" to it)
 6. Collections.
     - Map. For example, extract array of customer names from array of customers. ex: `access :customers, extract: :name`
     - Objects from collection. Instead of extracting just the name, extract whole objects like in #5.  ex:  `access :customers, as: Customer`
 7. Joins
     - Using previously defined attributes. ex: `join :address, from: [:street, :city, :state:, :zip]`
     - Defining attributes in place.
-8. XML support
+8. Throw exception immediately when trying to use incompatible options (ex: `'finally' and 'as'`)
+9. Multiple simple paths in one line (ex: `access :name, :street, :city, :state`)
+10. XML support
 
 ## Contributing
 
