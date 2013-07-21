@@ -42,9 +42,7 @@ puts user.job
 1. DONE - Full path parsing more than just top level.  ex: `access :name, by: [:profile, :basic_info, :name]`
 2. Error handling for incorrectly specified paths
 3. Exception handling when a json does not contain a path, but that is ok.
-4. Transforms.
-    - Ruby provided. ex: `access :name, then: :capitalize`
-    - DONE - User defined.  ex: `access :name, then: lambda { |name| name.gsub('-',' ') }`
+4. DONE - Transforms. ex: `access :name, finally: lambda { |name| name.gsub('-',' ') }`
 5. Objects from sub-trees.  ex: `access :profile, as: Profile` (This would construct a LazyDoc Profile object and pass the json found at "profile" to it)
 6. Collections.
     - Map. For example, extract array of customer names from array of customers. ex: `access :customers, extract: :name`

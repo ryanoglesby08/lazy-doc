@@ -54,9 +54,9 @@ module LazyDoc
         end
       end
 
-      context 'then' do
+      context 'finally' do
         it 'executes a block on the the attribute at the json path' do
-          test_find.singleton_class.access :foo, then: lambda { |foo| foo.upcase }
+          test_find.singleton_class.access :foo, finally: lambda { |foo| foo.upcase }
           test_find.lazily_embed(json)
 
           expect(test_find.foo).to eq('BAR')

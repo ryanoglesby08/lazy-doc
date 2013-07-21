@@ -7,7 +7,7 @@ describe 'basic behavior with a simple JSON document' do
     access :name
     access :address, via: :streetAddress
     access :job_title, via: [:profile, :occupation, :title]
-    access :born_on, via: [:profile, :bornOn], then: lambda { |born_on| born_on.to_i }
+    access :born_on, via: [:profile, :bornOn], finally: lambda { |born_on| born_on.to_i }
 
     def initialize(json)
       lazily_embed(json)

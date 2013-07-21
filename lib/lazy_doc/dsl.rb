@@ -36,7 +36,7 @@ module LazyDoc
         json_path = options[:via] || attribute
         json_path = [json_path].flatten
 
-        transformation = options[:then] || lambda { |value| value }
+        transformation = options[:finally] || lambda { |value| value }
 
         define_method attribute do
           memoize attribute do
