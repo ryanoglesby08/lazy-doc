@@ -34,7 +34,7 @@ module LazyDoc
 
     module ClassMethods
       def access(attribute, options = {})
-        options = default_options(attribute).merge!(options)
+        options = default_options(attribute).merge(options)
 
         json_path = [options[:via]].flatten
         transformation = options[:finally]
