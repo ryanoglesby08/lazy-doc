@@ -2,6 +2,10 @@
 
 NOTE: LazyDoc is currently in alpha and is not quite ready for use.
 
+[![Build Status](https://travis-ci.org/ryanoglesby08/lazy-doc.png)](https://travis-ci.org/ryanoglesby08/lazy-doc)
+
+
+
 An implementation of the [Embedded Document](http://martinfowler.com/bliki/EmbeddedDocument.html) pattern for POROs.
 
 LazyDoc provides a declarative DSL for extracting deeply nested values from a JSON document. The embedded JSON is lazily
