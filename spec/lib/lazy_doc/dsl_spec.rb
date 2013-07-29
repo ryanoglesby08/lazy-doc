@@ -3,7 +3,7 @@ require_relative '../../spec_helper'
 module LazyDoc
   describe DSL do
     describe '.access' do
-      let(:json) { '{"foo":"bar"}' }
+      let(:json) { '{"foo":"bar", "blarg":"wibble"}' }
 
       subject(:test_find) { Object.new }
 
@@ -36,6 +36,18 @@ module LazyDoc
 
         expect(test_find.foo).to eq("bar")
       end
+
+      it 'provides simple access to more than one attribute' do
+        test_find.singleton_class.access :foo, :blarg
+        test_find.lazily_embed(json)
+
+        expect(test_find.foo).to eq("bar")
+        expect(test_find.blarg).to eq("wibble")
+      end
+
+      it 'raises ArgumentError when more than one attribute is accessed with options' do
+        expect { test_find.singleton_class.access :foo, :blarg, as: Foo}.to raise_error(ArgumentError, "Options provided for more than one attribute.")
+      end	
 
       context 'via' do
         it 'defines a method that accesses a named json attribute' do
