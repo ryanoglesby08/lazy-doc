@@ -33,23 +33,32 @@ module LazyDoc
 
 
     module ClassMethods
-      def access(attribute, options = {})
-        options = default_options(attribute).merge(options)
-
-        json_path = [options[:via]].flatten
-        transformation = options[:finally]
-        sub_object_class = options[:as]
-
-        define_method attribute do
-          memoize attribute do
-            value = extract_attribute_from json_path
-            transformed_value = transformation.call(value)
-
-            sub_object_class.nil? ? transformed_value : sub_object_class.new(transformed_value.to_json)
+      def access *args
+        attributes= {}
+        if args.last.is_a?(Hash)
+          raise ArgumentError, "Options provided for more than one attribute." if args.size != 2
+          attr = args.first
+          options = default_options(attr).merge(args.pop)
+          attributes[attr] = options
+        else 
+          args.each do |arg|
+            attributes[arg] = default_options(arg)
           end
-
         end
 
+        attributes.each do |attr, opts|
+          sub_object_class = opts[:as]
+          transformation = opts[:finally]
+          json_path = [opts[:via]].flatten
+          define_method attr do
+            memoize attr do
+              value = extract_attribute_from json_path
+              transformed_value = transformation.call(value)
+
+              sub_object_class.nil? ? transformed_value : sub_object_class.new(transformed_value.to_json)
+            end
+          end
+        end
       end
 
       NO_OP_TRANSFORMATION = lambda { |value| value }
