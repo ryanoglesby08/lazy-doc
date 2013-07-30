@@ -23,6 +23,7 @@ Add this line to your application's Gemfile:
 ## DSL Options
 
 1. Basic usage. `access :name` will look for a property called 'name' at the top level of the embedded document.
+2. Basic usage with multiple attributes. `access :name, :phone, :address` will look for all three properties. *This option does not currently support using any options.*
 2. `via`: `access :job, via: [:profile, :occupation]` will look for a property called 'job' by parsing through
 'profile' -> 'occupation'.
 3. `finally`: `access :initials, finally: lambda { |initials| initials.upcase }` will call the supplied block, passing in
