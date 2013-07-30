@@ -23,7 +23,7 @@ module LazyDoc
 
     def extract_attribute_from(json_path)
       json_path.inject(embedded_doc) do |final_value, attribute|
-        final_value[attribute.to_s]
+        final_value[attribute.to_s] || (raise AttributeNotFoundError, "Unable to access #{attribute} via #{json_path.join(', ')}")
       end
     end
 
@@ -97,5 +97,4 @@ module LazyDoc
     end
 
   end
-
 end
