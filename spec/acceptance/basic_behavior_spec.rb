@@ -15,7 +15,8 @@ describe 'basic behavior with a simple JSON document' do
   class User
     include LazyDoc::DSL
 
-    access :name, :phone
+    access :name
+    access :phone, :zip
     access :address, via: :streetAddress
     access :job_title, via: [:profile, :occupation, :title]
     access :born_on, via: [:profile, :bornOn], finally: lambda { |born_on| born_on.to_i }
@@ -33,6 +34,7 @@ describe 'basic behavior with a simple JSON document' do
 
   its(:name) { should == 'Tyler Durden' }
   its(:phone) { should == '288-555-0153' }
+  its(:zip) { should == '00000' }
   its(:address) { should == 'Paper Street' }
   its(:job_title) { should == 'Soap Maker' }
   its(:born_on) { should == 1999 }

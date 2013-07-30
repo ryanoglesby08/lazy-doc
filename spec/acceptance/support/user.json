@@ -2,6 +2,7 @@
   "name": "Tyler Durden",
   "phone": "288-555-0153",
   "streetAddress": "Paper Street",
+  "zip": "00000",
   "profile": {
     "bornOn": "1999",
     "occupation": {
