@@ -55,8 +55,8 @@ puts user.job
 ## To Do
 
 1. DONE - Full path parsing more than just top level.  ex: `access :name, by: [:profile, :basic_info, :name]`
-2. Error handling for incorrectly specified paths
-3. Exception handling when a json does not contain a path, but that is ok.
+2. Error throwing for incorrectly specified paths
+3. Default value if json does not contain specified path or is null or empty. ex: `access :currency, default: 'USD'`
 4. DONE - Transforms. ex: `access :name, finally: lambda { |name| name.gsub('-',' ') }`
 5. DONE - Objects from sub-trees.  ex: `access :profile, as: Profile` (This would construct a LazyDoc Profile object and pass the json found at "profile" to it)
 6. Collections.
@@ -66,7 +66,7 @@ puts user.job
     - Using previously defined attributes. ex: `join :address, from: [:street, :city, :state:, :zip]`
     - Defining attributes in place.
 8. Throw exception immediately when trying to use incompatible options (ex: `'finally' and 'as'`)
-9. Multiple simple paths in one line (ex: `access :name, :street, :city, :state`)
+9. DONE - Multiple simple paths in one line (ex: `access :name, :street, :city, :state`)
 10. XML support
 
 ## Contributing
