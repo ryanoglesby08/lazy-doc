@@ -27,37 +27,62 @@ module LazyDoc
       end
     end
 
+    def handle_sub_object_class(value, sub_object_class)
+      sub_object_class.nil? ? value : sub_object_class.new(value.to_json)
+    end
+
     def embedded_doc
       @_embedded_doc ||= JSON.parse(@_embedded_doc_source)
     end
 
 
     module ClassMethods
-      def access *args
-        attributes= {}
-        if args.last.is_a?(Hash)
-          raise ArgumentError, "Options provided for more than one attribute." if args.size != 2
-          attr = args.first
-          options = default_options(attr).merge(args.pop)
-          attributes[attr] = options
-        else 
-          args.each do |arg|
-            attributes[arg] = default_options(arg)
-          end
-        end
+      def access(*arguments)
+        attributes, options = extract_from(arguments)
+        attribute_options = build_attribute_options(attributes, options)
+        define_access_methods_for(attribute_options)
+      end
 
-        attributes.each do |attr, opts|
-          sub_object_class = opts[:as]
-          transformation = opts[:finally]
-          json_path = [opts[:via]].flatten
-          define_method attr do
-            memoize attr do
+      def define_access_methods_for(attribute_options)
+        attribute_options.each do |attribute, options|
+          json_path = [options[:via]].flatten
+          transformation = options[:finally]
+          sub_object_class = options[:as]
+
+          define_method attribute do
+            memoize attribute do
               value = extract_attribute_from json_path
               transformed_value = transformation.call(value)
-
-              sub_object_class.nil? ? transformed_value : sub_object_class.new(transformed_value.to_json)
+              handle_sub_object_class(transformed_value, sub_object_class)
             end
+
           end
+
+        end
+
+      end
+
+      def extract_from(arguments)
+        arguments << {} unless arguments.last.is_a? Hash
+
+        options = arguments.pop
+        attributes = [arguments].flatten
+
+        verify_arguments(attributes, options)
+
+        [attributes, options]
+      end
+
+      def verify_arguments(attributes, options)
+        if attributes.size > 1 && !options.empty?
+          raise ArgumentError, 'Options provided for more than one attribute.'
+        end
+      end
+
+      def build_attribute_options(attributes, options)
+        attributes.inject({}) do |attribute_options, attribute|
+          attribute_options[attribute] = default_options(attribute).merge(options)
+          attribute_options
         end
       end
 
