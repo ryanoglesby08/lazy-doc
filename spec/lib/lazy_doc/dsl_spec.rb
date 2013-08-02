@@ -49,6 +49,13 @@ module LazyDoc
         expect { test_find.singleton_class.access :foo, :blarg, as: Foo}.to raise_error(ArgumentError, "Options provided for more than one attribute.")
       end	
 
+      it 'should throw an AttributeNotFoundError if attribute not in json path' do
+        test_find.singleton_class.access :does_not_exist
+        test_find.lazily_embed(json)
+
+        expect { test_find.does_not_exist }.to raise_error(AttributeNotFoundError)
+      end
+
       context 'via' do
         it 'defines a method that accesses a named json attribute' do
           test_find.singleton_class.access :my_foo, via: :foo
@@ -97,7 +104,6 @@ module LazyDoc
           expect(foo.bar).to eq('Hello')
         end
       end
-
     end
 
   end
