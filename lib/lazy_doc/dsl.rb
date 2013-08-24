@@ -51,9 +51,9 @@ module LazyDoc
 
           define_method attribute do
             memoize attribute do
-              value = extract_attribute_from json_path
-              transformed_value = transformation.call(value)
-              handle_sub_object_class(transformed_value, sub_object_class)
+              value = extract_attribute_from(json_path)
+              value = handle_sub_object_class(value, sub_object_class)
+              transformation.call(value)
             end
 
           end
@@ -75,7 +75,7 @@ module LazyDoc
 
       def verify_arguments(attributes, options)
         if attributes.size > 1 && !options.empty?
-          raise ArgumentError, 'Options provided for more than one attribute.'
+          raise ArgumentError, 'Options provided for multiple attributes.'
         end
       end
 

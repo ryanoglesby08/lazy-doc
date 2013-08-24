@@ -46,7 +46,7 @@ module LazyDoc
       end
 
       it 'raises ArgumentError when more than one attribute is accessed with options' do
-        expect { test_find.singleton_class.access :foo, :blarg, as: Foo}.to raise_error(ArgumentError, "Options provided for more than one attribute.")
+        expect { test_find.singleton_class.access :foo, :blarg, as: Foo}.to raise_error(ArgumentError, "Options provided for multiple attributes.")
       end	
 
       it 'should throw an AttributeNotFoundError if attribute not in json path' do
@@ -83,6 +83,8 @@ module LazyDoc
       end
 
       context 'as' do
+        let(:json) { '{"foo": {"bar": "Hello"}}'}
+
         class Foo
           include LazyDoc::DSL
 
@@ -94,7 +96,6 @@ module LazyDoc
         end
 
         it 'embeds a sub-object into another user defined object' do
-          json = '{"foo": {"bar": "Hello"}}'
           test_find.singleton_class.access :foo, as: Foo
           test_find.lazily_embed(json)
 
@@ -102,6 +103,16 @@ module LazyDoc
 
           expect(foo).to be_a(Foo)
           expect(foo.bar).to eq('Hello')
+        end
+
+        it 'calls the finally method on the sub-object defined by "as"' do
+          class Foo
+            def bar_baz; bar + ' World' end
+          end
+          test_find.singleton_class.access :foo, as: Foo, finally: lambda { |foo| foo.bar_baz }
+          test_find.lazily_embed(json)
+
+          expect(test_find.foo).to eq('Hello World')
         end
       end
     end
