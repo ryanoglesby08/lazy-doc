@@ -65,9 +65,8 @@ puts user.job
 7. Joins
     - Using previously defined attributes. ex: `join :address, from: [:street, :city, :state:, :zip]`
     - Defining attributes in place.
-8. Throw exception immediately when trying to use incompatible options (ex: `'finally' and 'as'`)
-9. DONE - Multiple simple paths in one line (ex: `access :name, :street, :city, :state`)
-10. XML support
+8. DONE - Multiple simple paths in one line (ex: `access :name, :street, :city, :state`)
+9. XML support
 
 ## Contributing
 
