@@ -27,10 +27,6 @@ module LazyDoc
       end
     end
 
-    def handle_sub_object_class(value, sub_object_class)
-      sub_object_class.nil? ? value : sub_object_class.new(value.to_json)
-    end
-
     def embedded_doc
       @_embedded_doc ||= JSON.parse(@_embedded_doc_source)
     end
@@ -46,14 +42,15 @@ module LazyDoc
       def define_access_methods_for(attribute_options)
         attribute_options.each do |attribute, options|
           json_path = [options[:via]].flatten
-          transformation = options[:finally]
-          sub_object_class = options[:as]
+
+          as_class_command = Commands::AsClassCommand.new(options[:as])
+          finally_command = Commands::FinallyCommand.new(options[:finally])
 
           define_method attribute do
             memoize attribute do
               value = extract_attribute_from(json_path)
-              value = handle_sub_object_class(value, sub_object_class)
-              transformation.call(value)
+              value = as_class_command.execute(value)
+              finally_command.execute(value)
             end
 
           end
@@ -75,7 +72,7 @@ module LazyDoc
 
       def verify_arguments(attributes, options)
         if attributes.size > 1 && !options.empty?
-          raise ArgumentError, 'Options provided for multiple attributes.'
+          raise ArgumentError, 'Options provided for multiple attributes'
         end
       end
 
@@ -86,11 +83,9 @@ module LazyDoc
         end
       end
 
-      NO_OP_TRANSFORMATION = lambda { |value| value }
       def default_options(attribute)
         {
-          via: attribute,
-          finally: NO_OP_TRANSFORMATION
+          via: attribute
         }
       end
 
