@@ -56,7 +56,7 @@ puts user.job
 
 1. DONE - Full path parsing more than just top level.  ex: `access :name, by: [:profile, :basic_info, :name]`
 2. DONE - Error throwing for incorrectly specified paths
-3. Default value if json does not contain specified path or is null or empty. ex: `access :currency, default: 'USD'`
+3. DONE - Default value if json is null or empty. ex: `access :currency, default: 'USD'`
 4. DONE - Transforms. ex: `access :name, finally: lambda { |name| name.gsub('-',' ') }`
 5. DONE - Objects from sub-trees.  ex: `access :profile, as: Profile` (This would construct a LazyDoc Profile object and pass the json found at "profile" to it)
 6. Collections.

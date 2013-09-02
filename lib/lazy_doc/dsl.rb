@@ -23,7 +23,9 @@ module LazyDoc
 
     def extract_attribute_from(json_path)
       json_path.inject(embedded_doc) do |final_value, attribute|
-        final_value[attribute.to_s] || (raise AttributeNotFoundError, "Unable to access #{attribute} via #{json_path.join(', ')}")
+        raise AttributeNotFoundError.new("Unable to access #{attribute} via #{json_path.join(', ')}") unless final_value.has_key?(attribute.to_s)
+
+        final_value[attribute.to_s]
       end
     end
 
@@ -43,12 +45,14 @@ module LazyDoc
         attribute_options.each do |attribute, options|
           json_path = [options[:via]].flatten
 
+          default_value_command = Commands::DefaultValueCommand.new(options[:default])
           as_class_command = Commands::AsClassCommand.new(options[:as])
           finally_command = Commands::FinallyCommand.new(options[:finally])
 
           define_method attribute do
             memoize attribute do
               value = extract_attribute_from(json_path)
+              value = default_value_command.execute(value)
               value = as_class_command.execute(value)
               finally_command.execute(value)
             end

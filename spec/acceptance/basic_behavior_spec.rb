@@ -22,6 +22,7 @@ describe 'basic behavior with a simple JSON document' do
     access :job_title, via: [:profile, :occupation, :title]
     access :born_on, via: [:profile, :bornOn], finally: lambda { |born_on| born_on.to_i }
     access :friends, as: Friends
+    access :father, default: 'Chuck Palahniuk'
 
     def initialize(json)
       lazily_embed(json)
@@ -40,6 +41,7 @@ describe 'basic behavior with a simple JSON document' do
   its(:job_title) { should == 'Soap Maker' }
   its(:born_on) { should == 1999 }
   specify { expect { user.home_town }.to raise_error(LazyDoc::AttributeNotFoundError) }
+  its(:father) { should == 'Chuck Palahniuk' }
 
   context 'friends' do
     let(:friends) { user.friends }

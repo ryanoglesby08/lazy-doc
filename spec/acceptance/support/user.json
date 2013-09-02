@@ -10,6 +10,7 @@
       "salary": 0
     }
   },
+  "father": null,
   "friends": {
     "bestFriend": "Brad Pitt",
     "lover": "Helena Bonham Carter"

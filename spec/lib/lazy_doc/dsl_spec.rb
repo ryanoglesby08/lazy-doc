@@ -115,6 +115,24 @@ module LazyDoc
           expect(test_find.foo).to eq('Hello World')
         end
       end
+
+      context 'default' do
+        it 'returns the default value when the json value is null' do
+          json = '{"foo": null}'
+          test_find.singleton_class.access :foo, default: 'hello world'
+          test_find.lazily_embed(json)
+
+          expect(test_find.foo).to eq('hello world')
+        end
+
+        it 'returns the json value when the json value is not null' do
+          test_find.singleton_class.access :foo, default: 'hello world'
+          test_find.lazily_embed(json)
+
+          expect(test_find.foo).to eq('bar')
+        end
+      end
+
     end
 
   end
