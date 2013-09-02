@@ -47,13 +47,6 @@ module LazyDoc
 
       it 'raises ArgumentError when more than one attribute is accessed with options' do
         expect { test_find.singleton_class.access :foo, :blarg, as: Foo}.to raise_error(ArgumentError, 'Options provided for multiple attributes')
-      end	
-
-      it 'should throw an AttributeNotFoundError if attribute not in json path' do
-        test_find.singleton_class.access :does_not_exist
-        test_find.lazily_embed(json)
-
-        expect { test_find.does_not_exist }.to raise_error(AttributeNotFoundError)
       end
 
       context 'via' do
