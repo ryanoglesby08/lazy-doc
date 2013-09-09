@@ -12,13 +12,8 @@ module LazyDoc
 
     private
 
-    def memoize(attribute)
-      attribute_variable_name = "@_lazy_doc_#{attribute}"
-      unless instance_variable_defined?(attribute_variable_name)
-        instance_variable_set(attribute_variable_name, yield)
-      end
-
-      instance_variable_get(attribute_variable_name)
+    def memoizer
+      @_memoizer ||= Memoizer.new
     end
 
     def embedded_doc
@@ -41,7 +36,7 @@ module LazyDoc
           finally_command       = Commands::FinallyCommand.new(options[:finally])
 
           define_method attribute do
-            memoize attribute do
+            memoizer.memoize attribute do
               value = via_command.execute(embedded_doc)
 
               value = default_value_command.execute(value)
