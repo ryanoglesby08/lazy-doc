@@ -24,26 +24,37 @@ module LazyDoc
     module ClassMethods
       def access(*arguments)
         attributes, options = extract_from(arguments)
-        attribute_options = build_attribute_options(attributes, options)
-        define_access_methods_for(attribute_options)
+
+        if attributes.size == 1
+          define_access_method_for(attributes[0], options)
+        else
+          define_access_methods_for(attributes)
+        end
       end
 
-      def define_access_methods_for(attribute_options)
-        attribute_options.each do |attribute, options|
-          via_command           = Commands::ViaCommand.new(options[:via])
-          default_value_command = Commands::DefaultValueCommand.new(options[:default])
-          as_class_command      = Commands::AsClassCommand.new(options[:as])
-          finally_command       = Commands::FinallyCommand.new(options[:finally])
+      def define_access_method_for(attribute, options)
+        create_method(attribute,  Commands::ViaCommand.new(options[:via] || attribute),
+                                  Commands::DefaultValueCommand.new(options[:default]),
+                                  Commands::AsClassCommand.new(options[:as]),
+                                  Commands::FinallyCommand.new(options[:finally]))
+      end
 
-          define_method attribute do
-            memoizer.memoize attribute do
-              value = via_command.execute(embedded_doc)
+      def define_access_methods_for(attributes)
+        attributes.each do |attribute|
+          create_method(attribute, Commands::ViaCommand.new(attribute))
+        end
 
-              value = default_value_command.execute(value)
-              value = as_class_command.execute(value)
-              finally_command.execute(value)
+      end
+
+      def create_method(attribute, required_command, *optional_commands)
+        define_method attribute do
+          memoizer.memoize attribute do
+            value = required_command.execute(embedded_doc)
+
+            optional_commands.inject(value) do |final_value, command|
+              final_value = command.execute(final_value)
+              final_value
             end
-
           end
 
         end
@@ -67,20 +78,8 @@ module LazyDoc
         end
       end
 
-      def build_attribute_options(attributes, options)
-        attributes.inject({}) do |attribute_options, attribute|
-          attribute_options[attribute] = default_options(attribute).merge(options)
-          attribute_options
-        end
-      end
-
-      def default_options(attribute)
-        {
-          via: attribute
-        }
-      end
-
     end
 
   end
+
 end

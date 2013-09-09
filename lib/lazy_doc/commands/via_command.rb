@@ -7,7 +7,7 @@ module LazyDoc::Commands
     end
 
     def execute(document)
-      path.flatten.inject(document) do |final_value, attribute|
+      path.inject(document) do |final_value, attribute|
         unless final_value.has_key?(attribute.to_s)
           raise LazyDoc::AttributeNotFoundError.new("Unable to access #{attribute} via #{path.join(', ')}")
         end
