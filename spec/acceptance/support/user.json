@@ -14,5 +14,12 @@
   "friends": {
     "bestFriend": "Brad Pitt",
     "lover": "Helena Bonham Carter"
+  },
+  "fightClub": {
+    "rules": [
+      {"number": 1, "title": "You do not talk about Fight Club"},
+      {"number": 2, "title": "You DO NOT talk about Fight Club"},
+      {"number": 3, "title": "If someone says stop or goes limp, taps out the fight is over"}
+    ]
   }
 }

@@ -23,6 +23,7 @@ describe 'basic behavior with a simple JSON document' do
     access :born_on, via: [:profile, :bornOn], finally: lambda { |born_on| born_on.to_i }
     access :friends, as: Friends
     access :father, default: 'Chuck Palahniuk'
+    access :fight_club_rules, via: [:fightClub, :rules], extract: :title
 
     def initialize(json)
       lazily_embed(json)
@@ -49,4 +50,8 @@ describe 'basic behavior with a simple JSON document' do
     specify { expect(friends.best_friend).to eq('Brad Pitt') }
     specify { expect(friends.lover).to eq('Helena Bonham Carter') }
   end
+
+  its(:fight_club_rules) { should == ['You do not talk about Fight Club',
+                                      'You DO NOT talk about Fight Club',
+                                      'If someone says stop or goes limp, taps out the fight is over'] }
 end

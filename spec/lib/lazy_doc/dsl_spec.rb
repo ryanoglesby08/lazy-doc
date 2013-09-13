@@ -126,6 +126,16 @@ module LazyDoc
         end
       end
 
+      context 'extract' do
+        it 'extracts the specified property name from each element in the array' do
+          json = '{"foo":[{"bar": "1"}, {"bar": "2"}, {"bar": "3"}]}'
+          test_find.singleton_class.access :foo, extract: :bar
+          test_find.lazily_embed(json)
+
+          expect(test_find.foo).to eq(['1','2','3'])
+        end
+      end
+
     end
 
   end

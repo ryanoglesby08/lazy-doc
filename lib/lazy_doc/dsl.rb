@@ -36,6 +36,7 @@ module LazyDoc
         create_method(attribute,  Commands::ViaCommand.new(options[:via] || attribute),
                                   Commands::DefaultValueCommand.new(options[:default]),
                                   Commands::AsClassCommand.new(options[:as]),
+                                  Commands::ExtractCommand.new(options[:extract]),
                                   Commands::FinallyCommand.new(options[:finally]))
       end
 
