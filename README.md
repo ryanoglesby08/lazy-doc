@@ -26,7 +26,7 @@ Add this line to your application's Gemfile:
 2. `access :name, :phone, :address` will look for all three properties. *This option does not currently support using any options.*
 3. `via`: `access :job, via: [:profile, :occupation]` will look for a property called 'job' by parsing through
 'profile' -> 'occupation'.
-4. `default`: `access :currency, default: 'USD'` will use the default value of 'USD' if the currency attribute is set to an empty value (empty? or nil?)
+4. `default`: `access :currency, default: 'USD'` will use the default value of 'USD' if the currency attribute is set to an empty value (`empty?` or `nil?`)
 5. `finally`: `access :initials, finally: lambda { |initials| initials.upcase }` will call the supplied block, passing in
 'initials,' and will return the result of that block.
 6. `as`: `access :profile, as: Profile` will pass the sub-document found at 'profile' into a new 'Profile' object, and will return
