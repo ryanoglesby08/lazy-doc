@@ -22,14 +22,18 @@ Add this line to your application's Gemfile:
 
 ## DSL Options
 
-1. Basic usage. `access :name` will look for a property called 'name' at the top level of the embedded document.
-2. Basic usage with multiple attributes. `access :name, :phone, :address` will look for all three properties. *This option does not currently support using any options.*
-2. `via`: `access :job, via: [:profile, :occupation]` will look for a property called 'job' by parsing through
+1. Basic usage. `access`: `access :name` will look for a property called 'name' at the top level of the embedded document.
+2. `access :name, :phone, :address` will look for all three properties. *This option does not currently support using any options.*
+3. `via`: `access :job, via: [:profile, :occupation]` will look for a property called 'job' by parsing through
 'profile' -> 'occupation'.
-3. `finally`: `access :initials, finally: lambda { |initials| initials.upcase }` will call the supplied block, passing in
+4. `default`: `access :currency, default: 'USD'` will use the default value of 'USD' if the currency attribute is set to an empty value (empty? or nil?)
+5. `finally`: `access :initials, finally: lambda { |initials| initials.upcase }` will call the supplied block, passing in
 'initials,' and will return the result of that block.
-4. `as`: `access :profile, as: Profile` will pass the sub-document found at 'profile' into a new 'Profile' object, and will return
+6. `as`: `access :profile, as: Profile` will pass the sub-document found at 'profile' into a new 'Profile' object, and will return
 the newly constructed Profile object. This is great for constructing nested LazyDoc relationships.
+7. `extract`: `access :customers, extract: :name` will make the assumption that the attribute 'customers' will be an array of objects and will extract the 'name' property from each object and return an array of 'names' (This would be the equivalent of the Enumerable#map method)
+
+
 
 ## Example Usage
 
@@ -38,7 +42,7 @@ class User
     include LazyDoc::DSL
 
     access :name                                        # Access the attribute "name"
-    access :address, via: :street_address               # Access the attribute "street_address"
+    access :address, via: :streetAddress                # Access the attribute "streetAddress"
     access :job, via: [:profile, :occupation, :title]   # Access the attribute "title" found at "profile" -> "occupation"
 
     def initialize(json)
@@ -46,6 +50,7 @@ class User
     end
 end
 
+json = '{"name": "George Washington", "streetAddress": "The White House", "profile": {"occupation": {"title": "President"}}}'
 user = User.new(json)
 puts user.name
 puts user.address
@@ -54,7 +59,7 @@ puts user.job
 
 ## To Do
 
-1. DONE - Full path parsing more than just top level.  ex: `access :name, by: [:profile, :basic_info, :name]`
+1. DONE - Full path parsing more than just top level.  ex: `access :name, via: [:profile, :basic_info, :name]`
 2. DONE - Error throwing for incorrectly specified paths
 3. DONE - Default value if json is null or empty. ex: `access :currency, default: 'USD'`
 4. DONE - Transforms. ex: `access :name, finally: lambda { |name| name.gsub('-',' ') }`
