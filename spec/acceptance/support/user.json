@@ -21,5 +21,10 @@
       {"number": 2, "title": "You DO NOT talk about Fight Club"},
       {"number": 3, "title": "If someone says stop or goes limp, taps out the fight is over"}
     ]
-  }
+  },
+  "accomplishments": [
+    {"description": "Sold a lot of soap"},
+    {"description": "Started fight club with himself"},
+    {"description": "Blew up a bunch of credit card companies"}
+  ]
 }

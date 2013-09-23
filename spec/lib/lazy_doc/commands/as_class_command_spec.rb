@@ -3,8 +3,7 @@ require_relative '../../../spec_helper'
 module LazyDoc
   describe Commands::AsClassCommand do
     class Foo
-      def initialize(value)
-      end
+      def initialize(value) end
     end
 
     let(:value) { {foo: 'bar'} }
@@ -37,6 +36,20 @@ module LazyDoc
       Foo.should_receive(:new).with("{\"foo\":\"bar\"}")
 
       as_class_command.execute(value)
+    end
+
+    context 'when the value being sent to the AsClassCommand is an array' do
+      let(:value) { [{foo: 'bar'}, {foo: 'baz'}] }
+
+      it 'returns an array of objects of the specified class' do
+        as_class_command = Commands::AsClassCommand.new(Foo)
+
+        as_class_value = as_class_command.execute(value)
+
+        expect(as_class_value).to be_an Array
+        expect(as_class_value[0]).to be_a Foo
+        expect(as_class_value[1]).to be_a Foo
+      end
     end
   end
 end

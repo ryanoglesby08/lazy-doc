@@ -66,8 +66,8 @@ puts user.job
 5. DONE - Objects from sub-trees.  ex: `access :profile, as: Profile` (This would construct a LazyDoc Profile object and pass the json found at "profile" to it)
 6. Collections.
     - DONE - Map. For example, extract array of customer names from array of customers. ex: `access :customers, extract: :name`
-    - Objects from collection. Instead of extracting just the name, extract whole objects like in #5.  ex:  `access :customers, as: Customer`
-    - Other Collection manipulations, select, inject, etc
+    - DONE - Objects from collection. Instead of extracting just the name, extract whole objects like in #5.  ex:  `access :customers, as: Customer`
+    - Other Collection manipulations, select, inject, count, etc
 7. Joins
     - Using previously defined attributes. ex: `join :address, from: [:street, :city, :state:, :zip]`
     - Defining attributes in place.

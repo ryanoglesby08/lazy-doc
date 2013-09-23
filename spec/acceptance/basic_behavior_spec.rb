@@ -12,6 +12,16 @@ describe 'basic behavior with a simple JSON document' do
     end
   end
 
+  class Accomplishment
+    include LazyDoc::DSL
+
+    access :description
+
+    def initialize(json)
+      lazily_embed(json)
+    end
+  end
+
   class User
     include LazyDoc::DSL
 
@@ -24,6 +34,7 @@ describe 'basic behavior with a simple JSON document' do
     access :friends, as: Friends
     access :father, default: 'Chuck Palahniuk'
     access :fight_club_rules, via: [:fightClub, :rules], extract: :title
+    access :accomplishments, as: Accomplishment
 
     def initialize(json)
       lazily_embed(json)
@@ -54,4 +65,12 @@ describe 'basic behavior with a simple JSON document' do
   its(:fight_club_rules) { should == ['You do not talk about Fight Club',
                                       'You DO NOT talk about Fight Club',
                                       'If someone says stop or goes limp, taps out the fight is over'] }
+
+  context 'accomplishments' do
+    let(:accomplishments) { user.accomplishments }
+
+    specify { expect(accomplishments[0].description).to eq('Sold a lot of soap') }
+    specify { expect(accomplishments[1].description).to eq('Started fight club with himself') }
+    specify { expect(accomplishments[2].description).to eq('Blew up a bunch of credit card companies') }
+  end
 end

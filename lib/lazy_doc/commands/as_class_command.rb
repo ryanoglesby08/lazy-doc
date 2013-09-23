@@ -7,7 +7,16 @@ module LazyDoc::Commands
     end
 
     def execute(value)
-      klass.nil? ? value : klass.new(value.to_json)
+      if klass.nil?
+        value
+      else
+        if value.is_a? Array
+          value.map { |element| klass.new(element.to_json) }
+        else
+          klass.new(value.to_json)
+        end
+      end
+
     end
   end
 end
