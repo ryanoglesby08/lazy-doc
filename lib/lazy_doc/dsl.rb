@@ -33,11 +33,8 @@ module LazyDoc
       end
 
       def define_access_method_for(attribute, options)
-        create_method(attribute,  Commands::ViaCommand.new(options[:via] || attribute),
-                                  Commands::DefaultValueCommand.new(options[:default]),
-                                  Commands::AsClassCommand.new(options[:as]),
-                                  Commands::ExtractCommand.new(options[:extract]),
-                                  Commands::FinallyCommand.new(options[:finally]))
+        optional_commands = Commands.create_commands_for options
+        create_method(attribute, Commands::ViaCommand.new(options[:via] || attribute), optional_commands)
       end
 
       def define_access_methods_for(attributes)
@@ -47,10 +44,10 @@ module LazyDoc
 
       end
 
-      def create_method(attribute, required_command, *optional_commands)
+      def create_method(attribute, via_command, optional_commands = [])
         define_method attribute do
           memoizer.memoize attribute do
-            value = required_command.execute(embedded_doc)
+            value = via_command.execute(embedded_doc)
 
             optional_commands.inject(value) do |final_value, command|
               final_value = command.execute(final_value)
