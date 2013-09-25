@@ -32,5 +32,14 @@ module LazyDoc
 
       expect { via.execute(document) }.to raise_error(AttributeNotFoundError)
     end
+
+    it 'finds the attribute when specified as snake_case but is found in camelCase' do
+      document = {'helloWorld' => 'foobar'}
+      via = Commands::ViaCommand.new(:hello_world)
+
+      final_value = via.execute(document)
+
+      expect(final_value).to eq('foobar')
+    end
   end
 end

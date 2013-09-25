@@ -1,3 +1,3 @@
 module LazyDoc
-  class AttributeNotFoundError < StandardError ;end
+  class AttributeNotFoundError < StandardError; end
 end
