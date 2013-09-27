@@ -72,7 +72,7 @@ puts user.job
     - Using previously defined attributes. ex: `join :address, from: [:street, :city, :state:, :zip]`
     - Defining attributes in place.
 8. DONE - Multiple simple paths in one line (ex: `access :name, :street, :city, :state`)
-9. Infer camelCase to snake_case and vice versa in JSON ex: `access :customer_name` (Where the json has customerName)
+9. DONE- Infer camelCase to snake_case and vice versa in JSON ex: `access :customer_name` (Where the json has customerName)
 10. XML support
 
 ## Contributing
