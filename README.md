@@ -1,7 +1,5 @@
 # LazyDoc
 
-NOTE: LazyDoc is currently in alpha and is not quite ready for use.
-
 [![Build Status](https://travis-ci.org/ryanoglesby08/lazy-doc.png)](https://travis-ci.org/ryanoglesby08/lazy-doc)
 
 
@@ -12,7 +10,7 @@ LazyDoc provides a declarative DSL for extracting deeply nested values from a JS
 parsed so that needed attributes from the document are only parsed when accessed. Finally, parsed values are cached
 so that subsequent access does not access the JSON again.
 
-*Currently, LazyDoc only supports JSON. XML support will be added later.*
+*Currently, LazyDoc only supports JSON. XML support may be added later.*
 
 ## Installation
 
@@ -56,24 +54,6 @@ puts user.name
 puts user.address
 puts user.job
 ```
-
-## To Do
-
-1. DONE - Full path parsing more than just top level.  ex: `access :name, via: [:profile, :basic_info, :name]`
-2. DONE - Error throwing for incorrectly specified paths
-3. DONE - Default value if json is null or empty. ex: `access :currency, default: 'USD'`
-4. DONE - Transforms. ex: `access :name, finally: lambda { |name| name.gsub('-',' ') }`
-5. DONE - Objects from sub-trees.  ex: `access :profile, as: Profile` (This would construct a LazyDoc Profile object and pass the json found at "profile" to it)
-6. Collections.
-    - DONE - Map. For example, extract array of customer names from array of customers. ex: `access :customers, extract: :name`
-    - DONE - Objects from collection. Instead of extracting just the name, extract whole objects like in #5.  ex:  `access :customers, as: Customer`
-    - Other Collection manipulations, select, inject, count, etc
-7. Joins
-    - Using previously defined attributes. ex: `join :address, from: [:street, :city, :state:, :zip]`
-    - Defining attributes in place.
-8. DONE - Multiple simple paths in one line (ex: `access :name, :street, :city, :state`)
-9. DONE- Infer camelCase to snake_case and vice versa in JSON ex: `access :customer_name` (Where the json has customerName)
-10. XML support
 
 ## Contributing
 
