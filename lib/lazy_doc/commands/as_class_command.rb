@@ -11,9 +11,9 @@ module LazyDoc::Commands
         value
       else
         if value.is_a? Array
-          value.map { |element| klass.new(element.to_json) }
+          value.map { |element| klass.new(element) }
         else
-          klass.new(value.to_json)
+          klass.new(value)
         end
       end
 

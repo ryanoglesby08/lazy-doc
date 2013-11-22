@@ -30,10 +30,10 @@ module LazyDoc
       expect(as_class_value).to eq(value)
     end
 
-    it 'passes the value as json to the specified class' do
+    it 'passes the value to the specified class' do
       as_class_command = Commands::AsClassCommand.new(Foo)
 
-      Foo.should_receive(:new).with("{\"foo\":\"bar\"}")
+      Foo.should_receive(:new).with(value)
 
       as_class_command.execute(value)
     end

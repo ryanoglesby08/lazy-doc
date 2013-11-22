@@ -1,23 +1,23 @@
-require 'json'
-
 module LazyDoc
   module DSL
+    include ParseIfNecessary
+
     def self.included(base)
       base.extend ClassMethods
     end
 
-    def lazily_embed(json)
-      @_embedded_doc_source = json
+    def lazily_embed(document)
+      @embedded_doc_source = document
     end
 
     private
 
     def memoizer
-      @_memoizer ||= Memoizer.new
+      @memoizer ||= Memoizer.new
     end
 
     def embedded_doc
-      @_embedded_doc ||= JSON.parse(@_embedded_doc_source)
+      @embedded_doc ||= parse_if_necessary(@embedded_doc_source)
     end
 
 

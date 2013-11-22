@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Frodo Baggins",
+    "race": "Hobbit"
+  },
+  {
+    "name": "Samwise Gamgee",
+    "race": "Hobbit"
+  },
+  {
+    "name": "Gandolf the Grey",
+    "race": "Wizard"
+  }
+]

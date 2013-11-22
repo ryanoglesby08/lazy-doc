@@ -55,6 +55,28 @@ puts user.address
 puts user.job
 ```
 
+## Collections
+
+When the document has a top-level array, use the `LazyDoc::Collection` class to transform it into an array of LazyDoc objects.
+
+usage:
+```ruby
+class User
+    include LazyDoc::DSL
+
+	access :name
+
+    # more...
+end
+
+json = '[{"name": "Brian"}, {"name": "Chris"}]'
+users = LazyDoc::Collection.build(json, User)
+
+users.each do |user|
+    puts user.name
+end
+```
+
 ## Contributing
 
 1. Fork it

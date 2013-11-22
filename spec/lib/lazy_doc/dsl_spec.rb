@@ -49,6 +49,14 @@ module LazyDoc
         expect { test_find.singleton_class.access :foo, :blarg, as: Foo}.to raise_error(ArgumentError, 'Options provided for multiple attributes')
       end
 
+      it 'can access properties when the supplied document is already a hash' do
+        test_find.singleton_class.access :foo, :blarg
+        test_find.lazily_embed(JSON.parse(json))
+
+        expect(test_find.foo).to eq("bar")
+        expect(test_find.blarg).to eq("wibble")
+      end
+
       context 'via' do
         it 'defines a method that accesses a named json attribute' do
           test_find.singleton_class.access :my_foo, via: :foo
